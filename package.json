@@ -2,7 +2,7 @@
   "name": "a02-Lesram21",
   "version": "1.0.0",
   "description": "package that ingests API data from Open-Mateo",
-  "main": "cli.js",
+  "main": "index.js",
   "bin": {
 	  "galosh.js": "./cli.js"
   },
@@ -14,6 +14,11 @@
     "type": "git",
     "url": "git+https://github.com/comp426-2022-fall/a02-Lesram21.git"
   },
+  "keywords": [
+	  "api",
+	  "weather",
+	  "cli"
+  ],
   "author": "@Lesram21",
   "license": "GPL-3.0-or-later",
   "bugs": {
