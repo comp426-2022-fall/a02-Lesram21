@@ -24,13 +24,13 @@ if (process.argv.indexOf('-h') > -1) {
 let latitude = '35'
 
 if (process.argv.indexOf('-n') > -1) {
-	latitude = arg[process.argv.indexOf('-n') -1]
+	latitude = argv[process.argv.indexOf('-n') -1]
 	if (latitude > 90 || latitude <-90) {
 		process.exit(1);
 	}
 }
 
-if (process.argv.indexOf(-s) > -1) {
+if (process.argv.indexOf('-s') > -1) {
 	latitude = argv[process.argv.indexOf('-s') -1] * -1;
 	if (latitude > 90 || latitude < -90) {
 		process.exit(1);
