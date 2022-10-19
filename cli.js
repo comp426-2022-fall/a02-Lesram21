@@ -4,12 +4,12 @@ import minimist from 'minimist';
 import moment from 'moment-timezone';
 import fetch from 'node-fetch';
 
-const args = minimist(process.argv.slice(2))
+var argv = process.argv.slice(2);
 //console.log(args)
 
 //help text
 
-if (args.h) {
+if (process.argv.indexOf('-h') > -1) {
 	console.log('Usage: galosh.js [options] -[n|s] LATITUDE -[e|w] LONGITUDE -z TIME_ZONE')
 	console.log('	 -h            Show this help message and exit.')
 	console.log('	 -n, -s        Latitude: N positive; S negative.')
@@ -23,40 +23,48 @@ if (args.h) {
 //declare latitude
 let latitude = '35'
 
-if (args.n) {
-	latitude = args.n
+if (process.argv.indexOf('-n') > -1) {
+	latitude = arg[process.argv.indexOf('-n') -1]
+	if (latitude > 90 || latitude <-90) {
+		process.exit(1);
+	}
 }
 
-if (args.s) {
-	latitude = -args.s
+if (process.argv.indexOf(-s) > -1) {
+	latitude = argv[process.argv.indexOf('-s') -1] * -1;
+	if (latitude > 90 || latitude < -90) {
+		process.exit(1);
+	}
 }
 
 
 //declare longitude
 let longitude = '79'
 
-if (args.e) {
-	longitude = args.e
+if (process.argv.indexOf('-w') > -1) {
+	longitude = argv[process.argv.indexOf('-w') -1];
+	if(longitude > 180 || longitude < -180) {
+		process.exit(1);
+	}
 }
 
-if (args.w) {
-	longitude = -args.w
+if (process.argv.indexOf('-e') > -1) {
+	longitude = arg[process.argv.indexOf('-e') -1] * 1;
+	if (longitude > 180 || longitude < -180) {
+		process.exit(1);
+	}
 }
 
 //Declare timezone
 var timezone = moment.tz.guess();
 
-if (args.z) {
-	timezone = args.z;
-}
-
-if (args.t) {
-	timezone = args.t;
+if (process.argv.indexOf('-z') > -1) {
+	timezone = argv[process.argv.indexOf('-z') -1];
 }
 
 //Make a request
 
-const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude + "&hourly=temperature_2m,precipitation&daily=precipitation_hours&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=" + timezone);
+const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=' + latitude + '&longitude=' + longitude + '&daily=precipitation_hours&current_weather=true&timezone=' + timezone);
 
 //Get the data from the request
 
@@ -64,32 +72,43 @@ const data = await response.json();
 
 //print data
 
-if (args.j) {
+if (process.argv.indexOf('-j') > -1) {
 	console.log(data);
+	process.exit(0);
 }
 
 //Days to retrieve weather
-const days = args.d
+var days = 1;
+
+if (process.argv.indexOf('-d') > -1) {
+	days = argv[process.argv.indexOf('-d') - 1];
+}
 
 if (days == 0) {
 	if (data.daily.precipitation_hours[days] == 0) {
-		console.log("No need to wear galoshes")
+		console.log('No need to wear galoshes')
 	} else {
-		console/log("Wear your galoshes")
+		console/log('Wear your galoshes')
 	}
-	console.log("today.")
+	console.log('today.')
+	process.exit(0);
 } else if (days > 1) {
 	if (data.daily.precipitation_hours[days] == 0) {
-		console.log("No need to wear galoshes")
+		console.log('No need to wear galoshes')
 	} else {
-		console.log("Wear your galoshes")
+		console.log('Wear your galoshes')
 	}
 	console.log("in " + days + "days.")
+	process.exit(0);
 } else {
 	if (data.daily.precipitation_hours[days] == 0) {
-		console.log("No need to wear galoshes")
+		console.log('No need to wear galoshes')
 	} else {
-		console.log("Wear your galoshes")
+		console.log('Wear your galoshes')
 	}
 	console.log("tomorrow.")
+	process.exit(0);
 }
+
+//error
+process.exit(1);
