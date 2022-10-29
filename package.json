@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "package that ingests API data from Open-Mateo",
-  "main": "index.js",
+  "main": "cli.js",
   "scripts": {
     "test": "node cli.js -n 35.92 -w 79.05 -z America/New_York"
   },
