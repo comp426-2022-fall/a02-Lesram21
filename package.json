@@ -11,6 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/comp426-2022-fall/a02-Lesram21.git"
   },
+  "bin": {
+    "galosh.js": "./cli.js"
+  },
   "author": "@Lesram21",
   "license": "GPL-3.0-or-later",
   "bugs": {
@@ -21,8 +24,5 @@
     "minimist": "^1.2.6",
     "moment-timezone": "^0.5.37",
     "node-fetch": "^3.2.10"
-  },
-  "bin": {
-	  "galosh.js": "./cli.js"
   }
 }

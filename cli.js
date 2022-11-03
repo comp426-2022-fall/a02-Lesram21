@@ -1,15 +1,15 @@
-#!/user/bin/env node
+#!/usr/bin/env node
 
 import minimist from 'minimist';
 import moment from 'moment-timezone';
 import fetch from 'node-fetch';
 
-var argv = process.argv.slice(2);
+const args = minimist(process.argv.slice(2))
 //console.log(args)
 
 //help text
 
-if (process.argv.indexOf('-h') > -1) {
+if (args.h) {
 	console.log('Usage: galosh.js [options] -[n|s] LATITUDE -[e|w] LONGITUDE -z TIME_ZONE')
 	console.log('	 -h            Show this help message and exit.')
 	console.log('	 -n, -s        Latitude: N positive; S negative.')
@@ -17,50 +17,43 @@ if (process.argv.indexOf('-h') > -1) {
 	console.log('	 -z	       Time zone: uses tz.guess() from moment-timezone by default.')
 	console.log('	 -d 0-6	       Day to retrieve weather: 0 is today; defaults to 1.')
 	console.log('	 -j	       Echo pretty JSON from open-mateo API and exit.')
-	proccess.exit(0);
+	process.exit(0);
+}
+
+//Declare timezone
+let timezone = moment.tz.guess()
+
+if (args.z) {
+	timezone=args.z
 }
 
 //declare latitude
 let latitude = '35'
 
-if (process.argv.indexOf('-n') > -1) {
-	latitude = argv[process.argv.indexOf('-n') -1]
-	if (latitude > 90 || latitude <-90) {
-		process.exit(1);
-	}
+if (args.n) {
+	latitude =args.n
 }
-
-if (process.argv.indexOf('-s') > -1) {
-	latitude = argv[process.argv.indexOf('-s') -1] * -1;
-	if (latitude > 90 || latitude < -90) {
-		process.exit(1);
-	}
+else if (args.s) {
+	latitude =-args.s
+}
+else {
+	console.log('latitude must be in range');
 }
 
 
 //declare longitude
 let longitude = '79'
 
-if (process.argv.indexOf('-w') > -1) {
-	longitude = argv[process.argv.indexOf('-w') -1];
-	if(longitude > 180 || longitude < -180) {
-		process.exit(1);
-	}
+if (args.e) {
+	longitude =args.e
+}
+else if (args.w) {
+	longitude =-args.w 
+}
+else {
+	console.log('longitude must be in range');
 }
 
-if (process.argv.indexOf('-e') > -1) {
-	longitude = arg[process.argv.indexOf('-e') -1] * 1;
-	if (longitude > 180 || longitude < -180) {
-		process.exit(1);
-	}
-}
-
-//Declare timezone
-var timezone = moment.tz.guess();
-
-if (process.argv.indexOf('-z') > -1) {
-	timezone = argv[process.argv.indexOf('-z') -1];
-}
 
 //Make a request
 
@@ -72,43 +65,29 @@ const data = await response.json();
 
 //print data
 
-if (process.argv.indexOf('-j') > -1) {
-	console.log(data);
+if (args.j) {
+	console.log(data)
 	process.exit(0);
 }
 
 //Days to retrieve weather
 var days = 1;
 
-if (process.argv.indexOf('-d') > -1) {
-	days = argv[process.argv.indexOf('-d') - 1];
+if (args.d || args.d==0) {
+	    days=args.d
 }
-
 if (days == 0) {
-	if (data.daily.precipitation_hours[days] == 0) {
-		console.log('No need to wear galoshes')
-	} else {
-		console/log('Wear your galoshes')
-	}
-	console.log('today.')
-	process.exit(0);
+	console.log("today.")
 } else if (days > 1) {
-	if (data.daily.precipitation_hours[days] == 0) {
-		console.log('No need to wear galoshes')
-	} else {
-		console.log('Wear your galoshes')
-	}
-	console.log("in " + days + "days.")
-	process.exit(0);
+	console.log("in " + days + " days.")
 } else {
-	if (data.daily.precipitation_hours[days] == 0) {
-		console.log('No need to wear galoshes')
-	} else {
-		console.log('Wear your galoshes')
-	}
 	console.log("tomorrow.")
-	process.exit(0);
 }
 
-//error
-process.exit(1);
+if(data.daily.precipitation_hours[days] != 0) {
+	console.log("You might need your galoshes");
+} else{
+	console.log("You will not need your galoshes");
+}
+
+
