@@ -75,6 +75,7 @@ if (args.d == 0) {
 
 if (args.j) {
 	console.log(data)
+	process.exit(0);
 } else {
 	let result = ""
 	if(data.daily.precipitation_hours[days] > 0) {
