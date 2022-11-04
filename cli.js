@@ -21,20 +21,20 @@ if (args.h) {
 }
 
 //Declare timezone
-let timezone = moment.tz.guess()
+let timezone = moment.tz.guess();
 
 if (args.z) {
-	timezone=args.z
+	timezone = args.z;
 }
 
 //declare latitude
-let latitude = '35'
+let latitude = 0;
 
 if (args.n) {
-	latitude =args.n
+	latitude = args.n;
 }
 else if (args.s) {
-	latitude =-args.s
+	latitude = -args.s;
 }
 else {
 	console.log('latitude must be in range');
@@ -42,13 +42,13 @@ else {
 
 
 //declare longitude
-let longitude = '79'
+let longitude = 0;
 
 if (args.e) {
-	longitude =args.e
+	longitude = args.e;
 }
 else if (args.w) {
-	longitude =-args.w 
+	longitude = -args.w;
 }
 else {
 	console.log('longitude must be in range');
@@ -57,7 +57,7 @@ else {
 
 //Make a request
 
-const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=' + latitude + '&longitude=' + longitude + '&daily=precipitation_hours&current_weather=true&timezone=' + timezone);
+const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=' + latitude + '&longitude=' + longitude + '&daily=precipitation_hours&timezone=' + timezone);
 
 //Get the data from the request
 
@@ -66,15 +66,14 @@ const data = await response.json();
 //print data
 
 if (args.j) {
-	console.log(data)
-	process.exit(0);
+	console.log(data);
 }
 
 //Days to retrieve weather
 var days = 1;
 
 if (args.d || args.d==0) {
-	    days=args.d
+	days = args.d;
 }
 if (days == 0) {
 	console.log("today.")
